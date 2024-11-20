@@ -76,6 +76,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isVisible = true;
+  bool selectedSPL = false;
+  bool selectedDSPL = false;
 
   AudioPlayer clickPlay = AudioPlayer();
   AudioPlayer thankyouPlay = AudioPlayer();
@@ -85,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
   initState() {
     audio();
     super.initState();
+    playWelcome();
   }
 
   Future<void> audio() async {
@@ -173,152 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Positioned(
                 top: 9.h,
-                child: SizedBox(
-                  height: 400,
-                  width: 97.w,
-                  child: Visibility(
-                    visible: isVisible,
-                    child: GridView.count(
-                      // shrinkWrap: true,
-                      // Create a grid with 2 columns. If you change the scrollDirection to
-                      // horizontal, this produces 2 rows.
-                      crossAxisCount:
-                          state.candidateMap.where((c) => c.forSPL).length,
-                      // Generate 100 widgets that display their index in the List.
-                      children: List.generate(
-                          state.candidateMap.where((c) => c.forSPL).length,
-                          (index) {
-                        String name = state.candidateMap
-                            .where((c) => c.forSPL)
-                            .elementAt(index)
-                            .name;
-
-                        bool clickValue = state.candidateMap
-                            .where((c) => c.forSPL)
-                            .elementAt(index)
-                            .click;
-
-                        bool hoverValue = state.candidateMap
-                            .where((c) => c.forSPL)
-                            .elementAt(index)
-                            .hover;
-
-                        String logo = state.candidateMap
-                            .where((c) => c.forSPL)
-                            .elementAt(index)
-                            .logo;
-
-                        bool isMale = state.candidateMap
-                            .where((c) => c.forSPL)
-                            .elementAt(index)
-                            .isMale;
-
-                        return GestureDetector(
-                          onTap: () => context
-                              .read<VoteCubit>()
-                              .toggleClick(index, true),
-                          child: MouseRegion(
-                            onEnter: (e) => context
-                                .read<VoteCubit>()
-                                .toggleHover(index, true),
-                            onExit: (e) => context
-                                .read<VoteCubit>()
-                                .toggleHover(index, true),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Opacity(
-                                opacity: 0.95,
-                                child: Card(
-                                  color: clickValue || hoverValue
-                                      ? isMale
-                                          ? Colors.blueAccent
-                                          : Colors.pinkAccent
-                                      : Colors.blueGrey.shade100,
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    padding: EdgeInsets.all(
-                                      hoverValue ? 15 : 20,
-                                    ),
-                                    child: Column(
-                                      // mainAxisAlignment: AlignmentDirectional.topCenter,
-                                      children: [
-                                        ElevatedButton.icon(
-                                          // onHover: (val) {
-                                          //   context
-                                          //       .read<VoteCubit>()
-                                          //       .toggleHover(index, true);
-                                          // },
-                                          icon: (!isMale)
-                                              ? Icon(
-                                                  Icons.woman,
-                                                  size: 14.sp,
-                                                  color: Colors.pinkAccent,
-                                                )
-                                              : Icon(
-                                                  Icons.man,
-                                                  size: 14.sp,
-                                                  color: Colors.blueAccent,
-                                                ),
-                                          onPressed: () {
-                                            context
-                                                .read<VoteCubit>()
-                                                .toggleClick(index, true);
-                                          },
-                                          label: Text(
-                                            name,
-                                            style: TextStyle(
-                                                color: (!isMale)
-                                                    ? Colors.pinkAccent
-                                                    : Colors.blueAccent,
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Material(
-                                          // needed
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            // onHover: (val) {
-                                            //   context
-                                            //       .read<VoteCubit>()
-                                            //       .toggleHover(index, true);
-                                            // },
-                                            onTap: () {
-                                              context
-                                                  .read<VoteCubit>()
-                                                  .toggleClick(index, true);
-                                              // _incrementCounter(student[index]);
-                                            }, // needed
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              child: Image(
-                                                width: 20.h,
-                                                height: 20.h,
-                                                fit: BoxFit.cover,
-                                                image:
-                                                    AssetImage('assets/$logo'),
-                                                alignment: Alignment.center,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                ),
+                child: candidateWidget(true, state, context),
               ),
               Positioned(
                 top: 47.h,
@@ -355,164 +213,408 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Positioned(
                 top: 55.h,
-                child: SizedBox(
-                  height: 400,
-                  width: 97.w,
-                  child: Visibility(
-                    visible: isVisible,
-                    child: GridView.count(
-                      // shrinkWrap: true,
-                      // Create a grid with 2 columns. If you change the scrollDirection to
-                      // horizontal, this produces 2 rows.
-                      crossAxisCount: state.candidateMap
-                          .where((c) => c.forSPL == false)
-                          .length,
-                      // Generate 100 widgets that display their index in the List.
-                      children: List.generate(
-                          state.candidateMap
-                              .where((c) => c.forSPL == false)
-                              .length, (index) {
-                        String name = state.candidateMap
-                            .where((c) => c.forSPL == false)
-                            .elementAt(index)
-                            .name;
-
-                        bool clickValue = state.candidateMap
-                            .where((c) => c.forSPL == false)
-                            .elementAt(index)
-                            .click;
-
-                        bool hoverValue = state.candidateMap
-                            .where((c) => c.forSPL == false)
-                            .elementAt(index)
-                            .hover;
-
-                        String logo = state.candidateMap
-                            .where((c) => c.forSPL == false)
-                            .elementAt(index)
-                            .logo;
-
-                        bool isMale = state.candidateMap
-                            .where((c) => c.forSPL == false)
-                            .elementAt(index)
-                            .isMale;
-
-                        return GestureDetector(
-                          onTap: () => context
-                              .read<VoteCubit>()
-                              .toggleClick(index, false),
-                          child: MouseRegion(
-                            onEnter: (e) => context
-                                .read<VoteCubit>()
-                                .toggleHover(index, false),
-                            onExit: (e) => context
-                                .read<VoteCubit>()
-                                .toggleHover(index, false),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Opacity(
-                                opacity: 0.95,
-                                child: Card(
-                                  color: clickValue || hoverValue
-                                      ? isMale
-                                          ? Colors.blueAccent
-                                          : Colors.pinkAccent
-                                      : Colors.blueGrey.shade100,
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    padding: EdgeInsets.all(
-                                      hoverValue ? 15 : 20,
-                                    ),
-                                    child: Column(
-                                      // mainAxisAlignment: AlignmentDirectional.topCenter,
-                                      children: [
-                                        ElevatedButton.icon(
-                                          // onHover: (val) {
-                                          //   context
-                                          //       .read<VoteCubit>()
-                                          //       .toggleHover(index, true);
-                                          // },
-                                          icon: (!isMale)
-                                              ? Icon(
-                                                  Icons.woman,
-                                                  size: 14.sp,
-                                                  color: Colors.pinkAccent,
-                                                )
-                                              : Icon(
-                                                  Icons.man,
-                                                  size: 14.sp,
-                                                  color: Colors.blueAccent,
-                                                ),
-                                          onPressed: () {
-                                            context
-                                                .read<VoteCubit>()
-                                                .toggleClick(index, false);
-                                          },
-                                          label: Text(
-                                            name,
-                                            style: TextStyle(
-                                                color: (!isMale)
-                                                    ? Colors.pinkAccent
-                                                    : Colors.blueAccent,
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Material(
-                                          // needed
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            // onHover: (val) {
-                                            //   context
-                                            //       .read<VoteCubit>()
-                                            //       .toggleHover(index, true);
-                                            // },
-                                            onTap: () {
-                                              context
-                                                  .read<VoteCubit>()
-                                                  .toggleClick(index, false);
-                                              // _incrementCounter(student[index]);
-                                            }, // needed
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              child: Image(
-                                                width: 20.h,
-                                                height: 20.h,
-                                                fit: BoxFit.cover,
-                                                image:
-                                                    AssetImage('assets/$logo'),
-                                                alignment: Alignment.center,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                ),
+                child: candidateWidget(false, state, context),
               ),
             ],
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => context.read<VoteCubit>().reset(),
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
+            onPressed: () {
+              floatAction(state, context);
+            },
+            tooltip: 'Summary',
+            child: const Icon(Icons.info_outline_rounded),
           ),
         );
       },
     );
+  }
+
+  void floatAction(VoteState state, BuildContext context) {
+    String password = "";
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(
+            "Password",
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          content: TextFormField(
+            obscureText: true,
+            onChanged: (value) {
+              password = value;
+            },
+          ),
+          actions: [
+            MaterialButton(
+              color: Colors.green,
+              textColor: Colors.white,
+              child: const Text('OK'),
+              onPressed: () {
+                setState(() {
+                  Navigator.pop(context);
+                  if (password == "5921") {
+                    showDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (_) {
+                          List<StudentState> studSPL = state.candidateMap
+                              .where((c) => c.forSPL == true)
+                              .toList();
+                          studSPL.sort((a, b) => a.name.compareTo(b.name));
+
+                          List<StudentState> studDSPL = state.candidateMap
+                              .where((c) => c.forSPL == false)
+                              .toList();
+
+                          studDSPL.sort((a, b) => a.name.compareTo(b.name));
+
+                          List<StudentState> stud = [...studSPL, ...studDSPL];
+
+                          return AlertDialog(
+                            title: Text(
+                              "Election Summary",
+                              style: TextStyle(
+                                  fontSize: 16.sp, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            content: SizedBox(
+                              width: 500,
+                              height: 70.h,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: state.candidateMap.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  StudentState s = stud.elementAt(index);
+                                  return Column(
+                                    children: <Widget>[
+                                      ListTile(
+                                        dense: false,
+                                        isThreeLine: false,
+                                        title: Text(
+                                          s.name,
+                                          style: TextStyle(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold,
+                                              color: index % 2 == 0
+                                                  ? s.forSPL
+                                                      ? Colors.pinkAccent
+                                                      : Colors.deepOrange
+                                                  : s.forSPL
+                                                      ? Colors.blueAccent
+                                                      : Colors.deepPurple),
+                                        ),
+                                        trailing: Text(
+                                          s.count.toString(),
+                                          style: TextStyle(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold,
+                                              color: index % 2 == 0
+                                                  ? s.forSPL
+                                                      ? Colors.pinkAccent
+                                                      : Colors.deepOrange
+                                                  : s.forSPL
+                                                      ? Colors.blueAccent
+                                                      : Colors.deepPurple),
+                                        ),
+                                      ),
+                                      const Divider(
+                                        height: 2.0,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            actions: [
+                              MaterialButton(
+                                  color: Colors.red,
+                                  textColor: Colors.white,
+                                  child: const Text('RESET'),
+                                  onPressed: () {
+                                    showDialog(
+                                      barrierDismissible: true,
+                                      context: context,
+                                      builder: (_) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                            'Sure you want to reset ?',
+                                            style: TextStyle(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          actions: [
+                                            MaterialButton(
+                                                color: Colors.red,
+                                                textColor: Colors.white,
+                                                child: const Text('RESET'),
+                                                onPressed: () {
+                                                  context
+                                                      .read<VoteCubit>()
+                                                      .reset();
+                                                  Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                }),
+                                            MaterialButton(
+                                                color: Colors.green,
+                                                textColor: Colors.white,
+                                                child: const Text('CANCEL'),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                }),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }),
+                              MaterialButton(
+                                  color: Colors.green,
+                                  textColor: Colors.white,
+                                  child: const Text('DONE'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  }),
+                            ],
+                          );
+                        });
+                  }
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget candidateWidget(bool forSPL, VoteState state, BuildContext context) {
+    return SizedBox(
+      height: 400,
+      width: 97.w,
+      child: AbsorbPointer(
+        absorbing: forSPL ? selectedSPL : selectedDSPL,
+        child: Visibility(
+          visible: isVisible,
+          child: GridView.count(
+            // shrinkWrap: true,
+            // Create a grid with 2 columns. If you change the scrollDirection to
+            // horizontal, this produces 2 rows.
+            crossAxisCount:
+                state.candidateMap.where((c) => c.forSPL == forSPL).length,
+            // Generate 100 widgets that display their index in the List.
+            children: List.generate(
+                state.candidateMap.where((c) => c.forSPL == forSPL).length,
+                (index) {
+              String name = state.candidateMap
+                  .where((c) => c.forSPL == forSPL)
+                  .elementAt(index)
+                  .name;
+
+              bool clickValue = state.candidateMap
+                  .where((c) => c.forSPL == forSPL)
+                  .elementAt(index)
+                  .click;
+
+              bool hoverValue = state.candidateMap
+                  .where((c) => c.forSPL == forSPL)
+                  .elementAt(index)
+                  .hover;
+
+              String logo = state.candidateMap
+                  .where((c) => c.forSPL == forSPL)
+                  .elementAt(index)
+                  .logo;
+
+              bool isMale = state.candidateMap
+                  .where((c) => c.forSPL == forSPL)
+                  .elementAt(index)
+                  .isMale;
+
+              return GestureDetector(
+                onTap: () {
+                  context.read<VoteCubit>().toggleClick(index, forSPL);
+
+                  if (forSPL == true) {
+                    setState(() {
+                      selectedSPL = true;
+                    });
+                  } else {
+                    setState(() {
+                      selectedDSPL = true;
+                    });
+                  }
+
+                  if (selectedSPL && selectedDSPL) {
+                    showThankYou(context);
+                  }
+                },
+                child: MouseRegion(
+                  onEnter: (e) =>
+                      context.read<VoteCubit>().toggleHover(index, forSPL),
+                  onExit: (e) =>
+                      context.read<VoteCubit>().toggleHover(index, forSPL),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Opacity(
+                      opacity: 0.95,
+                      child: Card(
+                        color: clickValue || hoverValue
+                            ? isMale
+                                ? Colors.blueAccent
+                                : Colors.pinkAccent
+                            : Colors.blueGrey.shade100,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: EdgeInsets.all(
+                            hoverValue ? 15 : 20,
+                          ),
+                          child: Column(
+                            // mainAxisAlignment: AlignmentDirectional.topCenter,
+                            children: [
+                              ElevatedButton.icon(
+                                // onHover: (val) {
+                                //   context
+                                //       .read<VoteCubit>()
+                                //       .toggleHover(index, true);
+                                // },
+                                icon: (!isMale)
+                                    ? Icon(
+                                        Icons.woman,
+                                        size: 14.sp,
+                                        color: Colors.pinkAccent,
+                                      )
+                                    : Icon(
+                                        Icons.man,
+                                        size: 14.sp,
+                                        color: Colors.blueAccent,
+                                      ),
+                                onPressed: () {
+                                  context
+                                      .read<VoteCubit>()
+                                      .toggleClick(index, forSPL);
+
+                                  if (forSPL == true) {
+                                    setState(() {
+                                      selectedSPL = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedDSPL = true;
+                                    });
+                                  }
+
+                                  if (selectedSPL && selectedDSPL) {
+                                    showThankYou(context);
+                                  }
+                                },
+                                label: Text(
+                                  name,
+                                  style: TextStyle(
+                                      color: (!isMale)
+                                          ? Colors.pinkAccent
+                                          : Colors.blueAccent,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Material(
+                                // needed
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  // onHover: (val) {
+                                  //   context
+                                  //       .read<VoteCubit>()
+                                  //       .toggleHover(index, true);
+                                  // },
+                                  onTap: () {
+                                    context
+                                        .read<VoteCubit>()
+                                        .toggleClick(index, forSPL);
+
+                                    if (forSPL == true) {
+                                      setState(() {
+                                        selectedSPL = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        selectedDSPL = true;
+                                      });
+                                    }
+
+                                    if (selectedSPL && selectedDSPL) {
+                                      showThankYou(context);
+                                    }
+                                    // _incrementCounter(student[index]);
+                                  }, // needed
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image(
+                                      width: 20.h,
+                                      height: 20.h,
+                                      fit: BoxFit.cover,
+                                      image: AssetImage('assets/$logo'),
+                                      alignment: Alignment.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showThankYou(BuildContext context) {
+    setState(() {
+      isVisible = false;
+    });
+
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          playThankyou();
+
+          Future.delayed(const Duration(seconds: 5), () {
+            context.read<VoteCubit>().reload();
+
+            setState(() {
+              isVisible = true;
+              selectedSPL = false;
+              selectedDSPL = false;
+            });
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            title: Text(
+              'Thank You !',
+              style: TextStyle(
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onTertiaryContainer),
+              textAlign: TextAlign.center,
+            ),
+          );
+        });
   }
 }

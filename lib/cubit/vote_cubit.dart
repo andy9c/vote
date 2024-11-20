@@ -23,12 +23,12 @@ class VoteCubit extends Cubit<VoteState> with HydratedMixin {
         .where((c) => c.forSPL == forSPLParam)
         .elementAt(index);
 
-    bool orgiHover = o.hover;
+    bool origHover = o.hover;
 
     StudentState t = configCopy.candidateMap
         .where((c) => c.forSPL == forSPLParam)
         .elementAt(index)
-        .copyWith(hover: !orgiHover);
+        .copyWith(hover: !origHover);
 
     int realIndex = configCopy.candidateMap.indexOf(o);
     configCopy.candidateMap.removeAt(realIndex);
@@ -44,57 +44,18 @@ class VoteCubit extends Cubit<VoteState> with HydratedMixin {
         .where((c) => c.forSPL == forSPLParam)
         .elementAt(index);
 
-    bool orgiClick = o.click;
+    bool origClick = o.click;
 
     StudentState t = configCopy.candidateMap
         .where((c) => c.forSPL == forSPLParam)
         .elementAt(index)
-        .copyWith(click: !orgiClick);
-
-    int realIndex = configCopy.candidateMap.indexOf(o);
-    configCopy.candidateMap.removeAt(realIndex);
-    configCopy.candidateMap.insert(realIndex, t);
-
-    emit(state.copyWith(candidateMap: configCopy.candidateMap));
-  }
-
-  void increaseCount(int index, bool forSPLParam) {
-    VoteState configCopy = getCopy();
-
-    int count = configCopy.candidateMap
-        .where((c) => c.forSPL == forSPLParam)
-        .elementAt(index)
-        .count;
-
-    StudentState o = configCopy.candidateMap
-        .where((c) => c.forSPL == forSPLParam)
-        .elementAt(index);
-
-    StudentState t =
-        configCopy.candidateMap.elementAt(index).copyWith(count: count + 1);
-
-    int realIndex = configCopy.candidateMap.indexOf(o);
-    configCopy.candidateMap.removeAt(realIndex);
-    configCopy.candidateMap.insert(realIndex, t);
-
-    emit(state.copyWith(candidateMap: configCopy.candidateMap));
-  }
-
-  void decreaseCount(int index, bool forSPLParam) {
-    VoteState configCopy = getCopy();
-
-    int count = configCopy.candidateMap
-        .where((c) => c.forSPL == forSPLParam)
-        .elementAt(index)
-        .count;
-
-    StudentState o = configCopy.candidateMap
-        .where((c) => c.forSPL == forSPLParam)
-        .elementAt(index);
-
-    StudentState t = configCopy.candidateMap
-        .elementAt(index)
-        .copyWith(count: count > 0 ? count - 1 : 0);
+        .copyWith(
+            click: !origClick,
+            count: origClick
+                ? o.count > 0
+                    ? o.count - 1
+                    : 0
+                : o.count + 1);
 
     int realIndex = configCopy.candidateMap.indexOf(o);
     configCopy.candidateMap.removeAt(realIndex);
@@ -116,6 +77,27 @@ class VoteCubit extends Cubit<VoteState> with HydratedMixin {
               count: candidate['count'],
             ))
         .toList();
+
+    studentStateList.shuffle();
+
+    emit(configCopy.copyWith(candidateMap: studentStateList));
+  }
+
+  void reload() {
+    VoteState configCopy = getCopy();
+    List<StudentState> studentStateList = configCopy.candidateMap
+        .map((candidate) => StudentState(
+              name: candidate.name,
+              logo: candidate.logo,
+              forSPL: candidate.forSPL,
+              isMale: candidate.isMale,
+              hover: false,
+              click: false,
+              count: candidate.count,
+            ))
+        .toList();
+
+    studentStateList.shuffle();
 
     emit(configCopy.copyWith(candidateMap: studentStateList));
   }
