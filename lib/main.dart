@@ -183,6 +183,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Visibility(
                   visible: isVisible,
                   child: ElevatedButton(
+                    style: const ButtonStyle(
+                      backgroundColor:
+                          WidgetStatePropertyAll(Colors.orangeAccent),
+                    ),
                     onPressed: () {},
                     child: Row(
                       children: [
@@ -198,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(
                             fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                            color: Colors.indigo,
                           ),
                         ),
                         // Icon(
@@ -439,21 +443,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
               return GestureDetector(
                 onTap: () {
-                  context.read<VoteCubit>().toggleClick(index, forSPL);
-
-                  if (forSPL == true) {
-                    setState(() {
-                      selectedSPL = true;
-                    });
-                  } else {
-                    setState(() {
-                      selectedDSPL = true;
-                    });
-                  }
-
-                  if (selectedSPL && selectedDSPL) {
-                    showThankYou(context);
-                  }
+                  optionClicked(index, forSPL, context);
                 },
                 child: MouseRegion(
                   onEnter: (e) =>
@@ -496,23 +486,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         color: Colors.blueAccent,
                                       ),
                                 onPressed: () {
-                                  context
-                                      .read<VoteCubit>()
-                                      .toggleClick(index, forSPL);
-
-                                  if (forSPL == true) {
-                                    setState(() {
-                                      selectedSPL = true;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      selectedDSPL = true;
-                                    });
-                                  }
-
-                                  if (selectedSPL && selectedDSPL) {
-                                    showThankYou(context);
-                                  }
+                                  optionClicked(index, forSPL, context);
                                 },
                                 label: Text(
                                   name,
@@ -538,24 +512,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   //       .toggleHover(index, true);
                                   // },
                                   onTap: () {
-                                    context
-                                        .read<VoteCubit>()
-                                        .toggleClick(index, forSPL);
-
-                                    if (forSPL == true) {
-                                      setState(() {
-                                        selectedSPL = true;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        selectedDSPL = true;
-                                      });
-                                    }
-
-                                    if (selectedSPL && selectedDSPL) {
-                                      showThankYou(context);
-                                    }
-                                    // _incrementCounter(student[index]);
+                                    optionClicked(index, forSPL, context);
                                   }, // needed
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
@@ -582,6 +539,24 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  void optionClicked(int index, bool forSPL, BuildContext context) {
+    context.read<VoteCubit>().toggleClick(index, forSPL);
+
+    if (forSPL == true) {
+      setState(() {
+        selectedSPL = true;
+      });
+    } else {
+      setState(() {
+        selectedDSPL = true;
+      });
+    }
+
+    if (selectedSPL && selectedDSPL) {
+      showThankYou(context);
+    }
   }
 
   void showThankYou(BuildContext context) {
