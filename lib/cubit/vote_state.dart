@@ -1,14 +1,12 @@
 part of 'vote_cubit.dart';
 
 class VoteState extends Equatable {
-  final List<StudentState> candidateMap;
+  final List<StudentState>? candidateMap;
 
-  const VoteState({
-    this.candidateMap = const [],
-  });
+  const VoteState({this.candidateMap});
 
   @override
-  List<Object> get props => [candidateMap];
+  List<Object?> get props => [candidateMap];
 
   VoteState copyWith({
     List<StudentState>? candidateMap,
@@ -21,7 +19,7 @@ class VoteState extends Equatable {
   static Map<String, dynamic> toMap(VoteState state) {
     return {
       'candidateMap':
-          state.candidateMap.map((e) => StudentState.toMap(e)).toList(),
+          state.candidateMap!.map((e) => StudentState.toMap(e)).toList(),
     };
   }
 

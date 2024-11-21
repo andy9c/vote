@@ -272,12 +272,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         barrierDismissible: true,
                         context: context,
                         builder: (_) {
-                          List<StudentState> studSPL = state.candidateMap
+                          List<StudentState> studSPL = state.candidateMap!
                               .where((c) => c.forSPL == true)
                               .toList();
                           studSPL.sort((a, b) => a.name.compareTo(b.name));
 
-                          List<StudentState> studDSPL = state.candidateMap
+                          List<StudentState> studDSPL = state.candidateMap!
                               .where((c) => c.forSPL == false)
                               .toList();
 
@@ -297,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               height: 70.h,
                               child: ListView.builder(
                                 shrinkWrap: true,
-                                itemCount: state.candidateMap.length,
+                                itemCount: state.candidateMap!.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   StudentState s = stud.elementAt(index);
                                   return Column(
@@ -416,32 +416,32 @@ class _MyHomePageState extends State<MyHomePage> {
             // Create a grid with 2 columns. If you change the scrollDirection to
             // horizontal, this produces 2 rows.
             crossAxisCount:
-                state.candidateMap.where((c) => c.forSPL == forSPL).length,
+                state.candidateMap!.where((c) => c.forSPL == forSPL).length,
             // Generate 100 widgets that display their index in the List.
             children: List.generate(
-                state.candidateMap.where((c) => c.forSPL == forSPL).length,
+                state.candidateMap!.where((c) => c.forSPL == forSPL).length,
                 (index) {
-              String name = state.candidateMap
+              String name = state.candidateMap!
                   .where((c) => c.forSPL == forSPL)
                   .elementAt(index)
                   .name;
 
-              bool clickValue = state.candidateMap
+              bool clickValue = state.candidateMap!
                   .where((c) => c.forSPL == forSPL)
                   .elementAt(index)
                   .click;
 
-              bool hoverValue = state.candidateMap
+              bool hoverValue = state.candidateMap!
                   .where((c) => c.forSPL == forSPL)
                   .elementAt(index)
                   .hover;
 
-              String logo = state.candidateMap
+              String logo = state.candidateMap!
                   .where((c) => c.forSPL == forSPL)
                   .elementAt(index)
                   .logo;
 
-              bool isMale = state.candidateMap
+              bool isMale = state.candidateMap!
                   .where((c) => c.forSPL == forSPL)
                   .elementAt(index)
                   .isMale;
