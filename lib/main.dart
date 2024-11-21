@@ -78,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isVisible = true;
   bool selectedSPL = false;
   bool selectedDSPL = false;
+  bool firstRun = true;
 
   AudioPlayer clickPlay = AudioPlayer();
   AudioPlayer thankyouPlay = AudioPlayer();
@@ -119,6 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return BlocBuilder<VoteCubit, VoteState>(
       builder: (context, state) {
+        if (firstRun == true) {
+          firstRun = false;
+          context.read<VoteCubit>().reset();
+        }
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -542,6 +547,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void optionClicked(int index, bool forSPL, BuildContext context) {
+    playClick();
     context.read<VoteCubit>().toggleClick(index, forSPL);
 
     if (forSPL == true) {
