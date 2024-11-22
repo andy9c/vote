@@ -290,49 +290,127 @@ class _MyHomePageState extends State<MyHomePage> {
                             content: SizedBox(
                               width: 500,
                               height: 70.h,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: state.candidateMap!.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  StudentState s = stud.elementAt(index);
-                                  return Column(
-                                    children: <Widget>[
-                                      ListTile(
-                                        dense: false,
-                                        isThreeLine: false,
-                                        title: Text(
-                                          s.name,
-                                          style: TextStyle(
-                                              fontSize: 32,
-                                              fontWeight: FontWeight.bold,
-                                              color: index % 2 == 0
-                                                  ? s.forSPL
-                                                      ? Colors.pinkAccent
-                                                      : Colors.deepOrange
-                                                  : s.forSPL
-                                                      ? Colors.blueAccent
-                                                      : Colors.deepPurple),
-                                        ),
-                                        trailing: Text(
-                                          s.count.toString(),
-                                          style: TextStyle(
-                                              fontSize: 32,
-                                              fontWeight: FontWeight.bold,
-                                              color: index % 2 == 0
-                                                  ? s.forSPL
-                                                      ? Colors.pinkAccent
-                                                      : Colors.deepOrange
-                                                  : s.forSPL
-                                                      ? Colors.blueAccent
-                                                      : Colors.deepPurple),
-                                        ),
+                              child: DefaultTabController(
+                                length: 2,
+                                child: Scaffold(
+                                  appBar: AppBar(
+                                    automaticallyImplyLeading: false,
+                                    bottom: const TabBar(
+                                      tabs: [
+                                        Tab(text: 'SPL Election Summary'),
+                                        Tab(text: 'DSPL Election Summary'),
+                                      ],
+                                    ),
+                                  ),
+                                  body: TabBarView(
+                                    children: [
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: studSPL.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          StudentState s =
+                                              studSPL.elementAt(index);
+                                          return Column(
+                                            children: <Widget>[
+                                              ListTile(
+                                                dense: false,
+                                                isThreeLine: false,
+                                                title: Text(
+                                                  s.name,
+                                                  style: TextStyle(
+                                                    fontSize: 32,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: index % 2 == 0
+                                                        ? s.forSPL
+                                                            ? Colors.pinkAccent
+                                                            : Colors.deepOrange
+                                                        : s.forSPL
+                                                            ? Colors.blueAccent
+                                                            : Colors.deepPurple,
+                                                  ),
+                                                ),
+                                                trailing: Text(
+                                                  s.count.toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 32,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: index % 2 == 0
+                                                          ? s.forSPL
+                                                              ? Colors
+                                                                  .pinkAccent
+                                                              : Colors
+                                                                  .deepOrange
+                                                          : s.forSPL
+                                                              ? Colors
+                                                                  .blueAccent
+                                                              : Colors
+                                                                  .deepPurple),
+                                                ),
+                                              ),
+                                              const Divider(
+                                                height: 2.0,
+                                              ),
+                                            ],
+                                          );
+                                        },
                                       ),
-                                      const Divider(
-                                        height: 2.0,
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: studDSPL.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          StudentState s =
+                                              studDSPL.elementAt(index);
+                                          return Column(
+                                            children: <Widget>[
+                                              ListTile(
+                                                dense: false,
+                                                isThreeLine: false,
+                                                title: Text(
+                                                  s.name,
+                                                  style: TextStyle(
+                                                    fontSize: 32,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: index % 2 == 0
+                                                        ? s.forSPL
+                                                            ? Colors.pinkAccent
+                                                            : Colors.deepOrange
+                                                        : s.forSPL
+                                                            ? Colors.blueAccent
+                                                            : Colors.deepPurple,
+                                                  ),
+                                                ),
+                                                trailing: Text(
+                                                  s.count.toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 32,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: index % 2 == 0
+                                                          ? s.forSPL
+                                                              ? Colors
+                                                                  .pinkAccent
+                                                              : Colors
+                                                                  .deepOrange
+                                                          : s.forSPL
+                                                              ? Colors
+                                                                  .blueAccent
+                                                              : Colors
+                                                                  .deepPurple),
+                                                ),
+                                              ),
+                                              const Divider(
+                                                height: 2.0,
+                                              ),
+                                            ],
+                                          );
+                                        },
                                       ),
                                     ],
-                                  );
-                                },
+                                  ),
+                                ),
                               ),
                             ),
                             actions: [
