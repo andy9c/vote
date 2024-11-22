@@ -89,13 +89,13 @@ const List<Map<String, dynamic>> candidateList = [
     "click": false,
     "count": 0,
   },
-  {
-    "name": "ARAV",
-    "logo": "11-01.jpg",
-    "forSPL": false,
-    "isMale": true,
-    "hover": false,
-    "click": false,
-    "count": 0,
-  },
+  // {
+  //   "name": "ARAV",
+  //   "logo": "11-01.jpg",
+  //   "forSPL": false,
+  //   "isMale": true,
+  //   "hover": false,
+  //   "click": false,
+  //   "count": 0,
+  // },
 ];
