@@ -278,7 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                           studDSPL.sort((a, b) => a.name.compareTo(b.name));
 
-                          List<StudentState> stud = [...studSPL, ...studDSPL];
+                          // List<StudentState> stud = [...studSPL, ...studDSPL];
 
                           return AlertDialog(
                             title: Text(
