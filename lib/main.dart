@@ -401,7 +401,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget candidateWidget(bool forSPL, VoteState state, BuildContext context) {
     return SizedBox(
       height: 400,
-      width: 97.w,
+      width: 80.w,
       child: AbsorbPointer(
         absorbing: forSPL ? selectedSPL : selectedDSPL,
         child: Visibility(
@@ -440,6 +440,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   .where((c) => c.forSPL == forSPL)
                   .elementAt(index)
                   .isMale;
+
+              int candidateCount =
+                  state.candidateMap!.where((c) => c.forSPL == forSPL).length;
 
               return GestureDetector(
                 onTap: () {
@@ -517,8 +520,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image(
-                                      width: 20.h,
-                                      height: 20.h,
+                                      width: 100.h / candidateCount,
+                                      height: 100.h / candidateCount,
                                       fit: BoxFit.cover,
                                       image: AssetImage('assets/$logo'),
                                       alignment: Alignment.center,
